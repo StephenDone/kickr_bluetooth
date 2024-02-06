@@ -3,6 +3,8 @@
 ## Introduction
 This repository contains information on how to connect to the KICKR Bike via Bluetooth Smart / BLE.
 As I discover more about the bike, I will add the information here.
+I intend to write some sample scripts to help others get started with their projects.
+I hope that the information here helps people get started with Bluetooth Low Energy and/or create some interesting projects with their exercise equipment.
 
 ## Documentation
 See the [Wiki](../../wiki) for documentation. 
