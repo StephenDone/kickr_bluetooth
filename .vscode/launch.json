@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Module",
+            "name": "Debug kickr_gatt.py",
             "type": "debugpy",
             "request": "launch",
-            "module": "kickr_gatt.py"
+            "module": "kickr_gatt"
         }
     ]
 }
