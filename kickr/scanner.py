@@ -1,7 +1,8 @@
 import bleak
 
 def device_filter(d, ad):
-            found = d.name and d.name.startswith('KICKR BIKE') and ad.service_uuids is not None
+            found = d.name and d.name.startswith('KICKR BIKE') \
+                and ad.service_uuids is not None and len(ad.service_uuids)>0
             if(found):
                 print(f'Found KICKR with name "{ad.local_name}", advertising...')
                 for uuid in ad.service_uuids:
