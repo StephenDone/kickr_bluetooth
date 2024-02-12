@@ -45,7 +45,12 @@ def tilt_handler(characteristic: BleakGATTCharacteristic, data: bytearray):
 def decode_tilt(data):
     #print(f'decode_tilt( {ToHex(data)} )')
 
+    if(len(data)==6 and data[0]==0x0D):
+        PowerCycles = unsigned_16(data[4], data[5])
+        return f'Power cycles = {PowerCycles}'
+
     if(data[0]==0xFD or data[0]==0xFE):
+
         # Lock status
         if(len(data)==3 and data[1]==0x33):
             locked:bool = (data[2] & 0x01) == 0x01
@@ -57,7 +62,7 @@ def decode_tilt(data):
             # print(f'signedint={signedint}')
             # angle = signedint / 100
             angle = bytes_to_tilt(data[2], data[3])
-            return f'Tilt angle={angle}°'
+            return f'Tilt angle = {angle}°'
 
         if(len(data)==4 and data[1]==0x67):
             locked = (data[3] & 0x01) == 0x01
@@ -79,6 +84,9 @@ def bytes_to_tilt(b1, b2):
             #print(f'signedint={signedint}')
             angle = signedint / 100
             return angle
+
+def unsigned_16(b1, b2):
+    return b1 | b2 << 8
 
 def sign_extend(value, bits):
     sign_bit = 1 << (bits - 1)
