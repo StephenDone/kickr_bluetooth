@@ -3,7 +3,7 @@ import asyncio
 import bleak
 from bleak.backends.characteristic import BleakGATTCharacteristic
 
-from convert import ToHex
+from convert import ToHex, unsigned_16, sign_extend
 
 import kickr.uuids
 
@@ -80,17 +80,6 @@ def decode_tilt(data):
     return f'Unknown tilt data'
 
 def bytes_to_tilt(b1, b2):
-            signedint = sign_extend(b1 | b2 << 8, 16)
-            #print(f'signedint={signedint}')
-            angle = signedint / 100
+            angle = sign_extend( value=unsigned_16( b1, b2 ), bits=16 ) / 100
             return angle
 
-def unsigned_16(b1, b2):
-    return b1 | b2 << 8
-
-def sign_extend(value, bits):
-    sign_bit = 1 << (bits - 1)
-    return (value & (sign_bit - 1)) - (value & sign_bit)
-
-
-#print(f'Tilt first read: {decode_tilt(await client.read_gatt_char(kickr_tilt_characteristic))}')
