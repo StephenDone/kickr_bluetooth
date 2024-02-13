@@ -9,6 +9,8 @@ import kickr.scanner
 import kickr.devinfo
 import kickr.tilt as tilt
 import kickr.chosen_gear as chosen_gear
+import kickr.buttons as buttons
+
 from convert import ToString, ToHex
 
 ShowCharacteristicDescriptors = False
@@ -29,7 +31,6 @@ async def main():
         else:
             return
         
-        '''
         kickr.uuids.print_uuids(client)
 
         await kickr.devinfo.read(client)
@@ -37,11 +38,14 @@ async def main():
         await tilt.start_notify(client)
         await tilt.read_tests(client)
         await tilt.stop_notify(client)
-        '''
 
         await chosen_gear.start_notify(client)
-        await asyncio.sleep(1000)
+        await asyncio.sleep(10)
         await chosen_gear.stop_notify(client)
+
+        await buttons.start_notify(client)
+        await asyncio.sleep(10)
+        await buttons.stop_notify(client)
 
     finally:
         await client.disconnect()
