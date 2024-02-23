@@ -3,7 +3,7 @@ import asyncio
 import bleak
 from bleak.backends.characteristic import BleakGATTCharacteristic
 
-from convert import ToHex, unsigned_16, sign_extend
+from convert import ToHex, signed_16, unsigned_16
 
 import kickr.uuids
 
@@ -12,7 +12,7 @@ async def read_tests(client):
     await write_tilt(client, '01')
     await write_tilt(client, '03')
     await write_tilt(client, '0B')
-    await write_tilt(client, '0C')
+    await write_tilt(client, '0C', 'Read Power Cycles')
     await write_tilt(client, '32')
     await write_tilt(client, '33')
     await write_tilt(client, '5D')
@@ -23,7 +23,7 @@ async def read_tests(client):
     await write_tilt(client, '69', 'Read Tilt Angle Limits')
     await write_tilt(client, '6A 00 00')
     await write_tilt(client, '6B')
-    print
+    print()
 
 async def write_tilt(client, hex, comment=None):
     data = bytearray.fromhex(hex)
@@ -43,24 +43,15 @@ def tilt_handler(characteristic: BleakGATTCharacteristic, data: bytearray):
     print()
 
 def decode_tilt(data):
-    #print(f'decode_tilt( {ToHex(data)} )')
 
     if(len(data)==6 and data[0]==0x0D):
+
         PowerCycles = unsigned_16(data[4], data[5])
         return f'Power cycles = {PowerCycles}'
 
     if(data[0]==0xFD or data[0]==0xFE):
 
-        # Lock status
-        if(len(data)==3 and data[1]==0x33):
-            locked:bool = (data[2] & 0x01) == 0x01
-            return f'Locked={locked}'
-        
-        # Tilt Angle
         if(len(data)==4 and data[1]==0x34):
-            # signedint = sign_extend(data[2] | data[3] << 8, 16)
-            # print(f'signedint={signedint}')
-            # angle = signedint / 100
             angle = bytes_to_tilt(data[2], data[3])
             return f'Tilt angle = {angle}°'
 
@@ -80,6 +71,6 @@ def decode_tilt(data):
     return f'Unknown tilt data'
 
 def bytes_to_tilt(b1, b2):
-            angle = sign_extend( value=unsigned_16( b1, b2 ), bits=16 ) / 100
+            angle = signed_16( b1, b2 ) / 100
             return angle
 
