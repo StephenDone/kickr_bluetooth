@@ -1,14 +1,17 @@
 import bleak
 
-kickr_virtual_bike_svc          = 'a026ee0d-0a7d-4ab3-97fa-f1500f9feb8b'
-kickr_buttons                   = 'a026e03c-0a7d-4ab3-97fa-f1500f9feb8b'
-kickr_chosen_gear               = 'a026e03a-0a7d-4ab3-97fa-f1500f9feb8b'
-kickr_groupset                  = 'a026e039-0a7d-4ab3-97fa-f1500f9feb8b'
+def normalize_wahoo_uuid(uuid) -> str:
+    return f'a026{uuid:04x}-0a7d-4ab3-97fa-f1500f9feb8b'
 
-kickr_cycling_power_extension   = 'a026e005-0a7d-4ab3-97fa-f1500f9feb8b'
+kickr_virtual_bike_svc          = normalize_wahoo_uuid(0xee0d)
+kickr_buttons                   = normalize_wahoo_uuid(0xe03c)
+kickr_chosen_gear               = normalize_wahoo_uuid(0xe03a)
+kickr_groupset                  = normalize_wahoo_uuid(0xe039)
 
-kickr_tilt_svc                  = 'a026ee0b-0a7d-4ab3-97fa-f1500f9feb8b'
-kickr_tilt_characteristic       = 'a026e037-0a7d-4ab3-97fa-f1500f9feb8b'
+kickr_cycling_power_extension   = normalize_wahoo_uuid(0xe005)
+
+kickr_tilt_svc                  = normalize_wahoo_uuid(0xee0b)
+kickr_tilt_characteristic       = normalize_wahoo_uuid(0xe037)
 
 def register_uuids():
     bleak.uuids.register_uuids({
